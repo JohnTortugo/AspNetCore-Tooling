@@ -81,7 +81,14 @@ namespace Microsoft.AspNetCore.Razor.Language.Extensions
                                 .WriteStartAssignment(TypeHelper)
                                 .Write("default(")
                                 .Write(node.Content)
-                                .WriteLine(");");
+                                .Write(")");
+
+                            if (!context.Options.SuppressNullabilityEnforcement)
+                            {
+                                context.CodeWriter.Write("!");
+                            }
+
+                            context.CodeWriter.WriteLine(";");
                         }
                         break;
 
@@ -105,7 +112,14 @@ namespace Microsoft.AspNetCore.Razor.Language.Extensions
                             context.AddSourceMappingFor(node);
                             context.CodeWriter
                                 .Write(node.Content)
-                                .WriteLine(" = null;");
+                                .Write(" = null");
+
+                            if (!context.Options.SuppressNullabilityEnforcement)
+                            {
+                                context.CodeWriter.Write("!");
+                            }
+
+                            context.CodeWriter.WriteLine(";");
                         }
                         break;
 
